@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>task10-1</title>
+    <style>
+        .header{
+            text-align: center;
+
+        }
+        h1{
+            font-size: 40px;
+            width: 800px;
+            display: inline-block;
+            border-bottom: 1px solid rgba(0,0,0,0.2);
+            padding-bottom: 15px;
+
+
+        }
+
+        li{
+            list-style: none;
+            box-shadow: 0px 2px 4px 2px rgba(0,0,0,0.3);
+            float: left;
+            margin-left:0px;
+
+            margin-top:20px;
+            margin-right: 10px;
+            text-align: center;
+            width: 260px;
+            /*border: 1px solid blue;*/
+        }
+        img{
+            width: 100%;
+            float: left;
+        }
+
+        .content::after{
+            content: " ";
+            display: block;
+            clear: both;
+        }
+        .content {
+            width: 830px;
+            margin: 0 auto;
+
+        }
+        .content1,.content2{
+            width: 100%;
+            margin: 0 auto;
+        }
+        p{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 30px;
+            margin: 1px;
+            font-size: 20px;
+                }
+
+
+
+    </style>
+</head>
+<body>
+<div class="header"><h1>风景列表</h1></div>
+
+<div class="content1">
+<ul class="content">
+    <li>
+        <img src="https://i.loli.net/2018/02/01/5a73109f0c726.png" alt="">
+        <div class="detail">
+            <p>风景如画</p>
+            </div>
+    </li>
+    <li>
+        <img src="https://i.loli.net/2018/02/01/5a73109f0c726.png" alt="">
+        <div class="detail"><p>风景如画</p></div>
+    </li>
+    <li>
+        <img src="https://i.loli.net/2018/02/01/5a73109f0c726.png" alt="">
+        <div class="detail"><p>风景如画</p></div>
+    </li>
+    </ul>
+</div>
+<div class="content2"><ul class="content">
+    <li>
+            <img src="https://i.loli.net/2018/02/01/5a73109f0c726.png" alt="">
+            <div class="detail"><p>风景如画</p></div>
+        </li>
+        <li>
+            <img src="https://i.loli.net/2018/02/01/5a73109f0c726.png" alt="">
+            <div class="detail"><p>风景如画</p></div>
+        </li>
+        <li>
+            <img src="https://i.loli.net/2018/02/01/5a73109f0c726.png" alt="">
+            <div class="detail"><p>风景如画</p></div>
+        </li>
+    </ul></div>
+</body>
+</html>
