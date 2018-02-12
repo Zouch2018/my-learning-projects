@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>task13</title>
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_568425_f32z6ldez2rzfr.css">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_569058_np6a1bfwcheyiudi.css">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_569058_nmzgfhmz0k2lc8fr.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            border: none;
+        }
+        body,html {
+            height: 100%;
+        }
+        body {
+            font: 14px/1.5 arial;
+            background-color: #fff;
+            color: #333;
+        }
+        header {
+            height: 100%;
+            min-height: 800px;
+            background: #fff url(https://i.loli.net/2018/02/12/5a81a9aba5977.jpeg) center center no-repeat;
+            background-size: cover;
+            position: relative;
+        }
+        .layout {
+            width: 1400px;
+            margin: 0 auto;
+        }
+        ul {
+            list-style: none;
+
+        }
+        a {
+            text-decoration: none;
+        }
+        .clearfix:after {
+            content: " ";
+            display: block;
+            clear: both;
+        }
+        header .logo {
+            font-size: 28px;
+            color: #fcd036;
+            float: left;
+            padding: 10px;
+        }
+        .nav ul a {
+            color: #fff;
+            padding: 20px 10px;
+            float: right;
+            font-size: 18px;
+        }
+        .nav ul a:hover {
+            color: #fcd036;
+        }
+        header .intro {
+            text-align: center;
+            color: #fff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%) ;
+        }
+        .button {
+            display: inline-block;
+            font-size: 22px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #fcd036;
+            border-radius: 4px;
+            opacity: 0.9;
+            padding: 16px 20px;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #fcbb0f;
+        }
+        .intro h2 {
+            font-size: 40px;
+        }
+        .intro h1 {
+            font-size: 52px;
+            margin-top: 20px;
+        }
+        main .section {
+            text-align: center;
+
+        }
+        main .section > h2 {
+            font-size: 66px;
+            margin-bottom: 10px;
+            margin-top: 120px;
+            display: inline-block;
+        }
+        main .section > p {
+            margin-bottom: 80px;
+            font-size: 18px;
+        }
+        .section > ul > li > h3 {
+            font-weight: bold;
+            font-size: 20px;
+            padding: 4px;
+        }
+        main > div[class*= bg-color]:nth-child(even) {
+            background-color: #f5f5f5;
+            padding-bottom: 90px;
+        }
+        main > div[class*= bg-color]:nth-child(odd) {
+            background-color: #fff;
+            padding-bottom: 100px;
+        }
+        .section > .service-intro > li {
+            float: left;
+            width: 33.33%;
+            padding: 30px 50px;
+          
+        }
+        .section > ul  .iconfont {
+            font-size: 100px;
+            color: #fcd036;
+        }
+        .section > ul > li > p {
+            margin: 6px;
+            background-color: #fff;
+        }
+        .section .atlas figure {
+            width: calc(33.33% - 20px);
+            height: 320px;
+
+            margin: 10px;
+            float: left;
+            background-color: #fff;
+        }
+        .section .atlas a {
+            display: block;
+            height: 240px;
+            position: relative;
+        }
+        .section .atlas figure img {
+            width: 100%;
+            height: 100%;
+        }
+        .section .atlas a .icon-plus {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            color: #fff;
+            font-size: 60px;
+        }
+        .section .atlas a .shade {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        .section .atlas a:hover .shade{
+            background-color: #fcd036;
+            display: block;
+            opacity: 0.8;
+        }
+        .section .atlas a:hover .icon-plus {
+            display: block;
+        }
+
+        .section .atlas figure figcaption {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .section .timeline .img {
+            display: inline-block;
+            text-align: center;
+            padding: 26px 18px;
+            background-color: #fcd036;
+            color: #fff;
+            font-weight: bold;
+        }
+        .section .timeline img,
+        .section .timeline .img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid #cbcbcb;
+        }
+        .section .timeline > li {
+            margin-top: 20px;
+            margin-bottom: 100px;
+            position: relative;
+
+        }
+        .section .timeline > li:nth-child(odd) img {
+            float: right;
+        }
+        .section .timeline > li:nth-child(odd) {
+            padding-right: calc(50% - 60px);
+            text-align: right;
+        }
+        .section .timeline li:nth-child(odd) dl {
+            margin-right: 150px;
+        }
+        .section .timeline > li:nth-child(even) img {
+            float: left;
+        }
+        .section .timeline > li:nth-child(even) {
+            padding-left: calc(50% - 60px);
+            text-align: left;
+        }
+        .section .timeline > li:nth-child(even) dl {
+            margin-left: 150px;
+
+        }
+        .section .timeline > li dt {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .section .timeline dt:nth-child(2) {
+            color: #555;
+        }
+        .section .timeline > li:before {
+            content: " ";
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            height:200px;
+            width: 2px;
+            background-color: #cbcbcb;
+        }
+        .section .timeline > li:last-child:before {
+            height: 0;
+        }
+        .section .team-intro {
+            width: 100%;        
+        }
+        .section .team-intro p {
+            background-color: transparent;
+        }
+        .section .team-intro > li {
+            width: 33.33%;
+            float: left;
+            text-align: center;
+            padding: 10px 100px;
+        }
+        .section .team-intro img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid #cbcbcb;
+        }
+        .section .team-intro .account .iconfont {
+            font-size: 40px;
+            color: #444;
+            border: 5px solid transparent;
+        }
+        .section .team-intro .account a:hover {
+            color: #fc9601;
+        }
+        .section .team-detail {
+            margin: 30px auto;
+            display: inline-block;
+            padding: 10px 300px;
+        }
+        .section .sponsor-logo {
+            padding: 0 14px;
+            margin: 20px;
+
+        }
+        .section .sponsor-logo > li {
+            float: left;
+            width: 25%;
+        }
+        .section .sponsor-logo img {
+            width: 100%;
+            height: 100%
+        }
+        .section .contact .information {
+            float: left;
+            width: 50%;
+        }
+        .section .contact .information input {
+            border: 1px solid #aaa;
+            padding: 5px;
+            width: 600px;
+            height: 80px;
+            margin: 10px;
+
+        }
+        .section .contact .message textarea {
+            width: 600px;
+            height: 280px;
+            border: 1px solid #aaa;
+            padding: 5px;
+            margin: 10px;
+        }
+        footer ul {
+            text-align: center;
+            font-size: 0;
+            padding-top: 30px;
+            padding-bottom: 10px;
+        }
+        footer ul > li {
+            width: 33.33%;
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 16px;
+        }
+        footer ul > li .iconfont {
+            font-size: 40px;
+            color: #444;
+            border: 5px solid transparent;
+        }
+        footer ul > li:last-child a {
+            color: #666;
+        }
+        footer ul > li a:hover {
+            color: #fcd036;
+        }
+        .contact-bg .section > h2,
+        .contact-bg .section > p{
+            color: #ddd;
+
+        }
+        main .contact-bg {
+            background: url(https://i.loli.net/2018/02/10/5a7ef4525ee3e.png) center center no-repeat;
+            height: 100%;
+            min-height: 800px;
+            background-size: cover;            
+        }
+
+    </style>
+</head>
+<body>
+  <header>
+   <div class="nav layout clearfix">
+       <a href="#" class="logo">Star Project</a>
+       <ul>
+           <li><a href="#">SERVICES</a></li>
+           <li><a href="#">PORTFOLIO</a></li>
+           <li><a href="#">ABOUT</a></li>
+           <li><a href="#">TEAM</a></li>
+           <li><a href="#">CONTACT</a></li>
+       </ul>
+   </div>
+   <div class="intro layout">
+       <h2>Welcome To Our Studio!</h2>
+       <h1>IT'S NICE TO MEET YOU</h1>
+       <a href="#" class="button">TELL ME MORE</a>
+   </div>
+  </header>
+  <main>
+    <div class="serivce-bg-color">
+      <div class="section layout">
+        <h2>Service</h2>
+        <p>Lorem ipsum dolor sit amet consectetur.</p>
+        <ul class="service-intro clearfix">
+            <li>
+                <span class="iconfont icon-font1"></span>
+                <h3>E-Commerce</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+            </li>
+            <li>
+                <i class="iconfont icon-font2"></i>
+                <h3>Responsive Design</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+            </li>
+            <li>
+                <span class="iconfont icon-font3"></span>
+                <h3>Web Security</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+            </li>
+        </ul>
+      </div>
+    </div>
+    <div class="atlas-bg-color">
+      <div class="section layout">
+        <h2>PORTFOLIO</h2>
+        <p>Lorem ipsum dolor sit amet consectetur.</p>
+        <div class="atlas clearfix">
+          <figure>
+            <a href=""><img src="https://i.loli.net/2018/02/09/5a7d67b761e9d.png" alt=""><span class="shade"></span><span class="iconfont icon-plus"></span></a>
+            <figcaption>Round Icons</figcaption>
+            <p>Graphic Design</p>
+          </figure>
+          <figure>
+            <a href=""><img src="https://i.loli.net/2018/02/12/5a816029b5911.png" alt=""><span class="shade"></span><span class="iconfont icon-plus"></span></a>
+            <figcaption>Round Icons</figcaption>
+            <p>Graphic Design</p>
+          </figure>
+          <figure>
+            <a href=""><img src="https://i.loli.net/2018/02/12/5a81622ca6b13.png" alt=""><span class="shade"></span><span class="iconfont icon-plus"></span></a>
+            <figcaption>Round Icons</figcaption>
+            <p>Graphic Design</p>
+          </figure>
+          <figure>
+            <a href=""><img src="https://i.loli.net/2018/02/12/5a81988c71b68.png" alt=""><span class="shade"></span><span class="iconfont icon-plus"></span></a>
+            <figcaption>Round Icons</figcaption>
+            <p>Graphic Design</p>
+          </figure>
+          <figure>
+            <a href=""><img src="https://i.loli.net/2018/02/12/5a819e19a91d7.png" alt=""><span class="shade"></span><span class="iconfont icon-plus"></span></a>
+            <figcaption>Round Icons</figcaption>
+            <p>Graphic Design</p>
+          </figure>
+          <figure>
+             <a href=""><img src="https://i.loli.net/2018/02/12/5a819e284c72f.png" alt=""><span class="shade"></span><span class="iconfont icon-plus"></span></a>
+             <figcaption>Round Icons</figcaption>
+             <p>Graphic Design</p>
+          </figure>
+        </div>
+      </div>
+    </div>
+    <div class="timeline-bg-color">
+      <div class="section layout">
+        <h2>About</h2>
+        <p>Lorem ipsum dolor sit amet consectetur.</p>
+        <ul class="timeline">
+          <li class="clearfix">
+            <img src="https://i.loli.net/2018/02/09/5a7d83da4bec3.png" alt="">
+            <dl>
+              <dt>2009-2011</dt>
+              <dd>Our Humble Beginning</dd>
+              <dd>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</dd>
+            </dl>
+          </li>
+        <li class="clearfix">
+          <img src="https://i.loli.net/2018/02/12/5a81a4f5660b5.jpeg" alt="">
+          <dl>
+            <dt>2009-2011</dt>
+            <dd>Our Humble Beginning</dd>
+            <dd>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</dd>
+          </dl>
+        </li>
+        <li class="clearfix">
+          <img src="https://i.loli.net/2018/02/12/5a81a56621ed8.png" alt="">
+          <dl>
+            <dt>2009-2011</dt>
+            <dd>Our Humble Beginning</dd>
+            <dd>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</dd>
+          </dl>
+        </li>
+        <li class="clearfix">
+          <img src="https://i.loli.net/2018/02/12/5a81a6b423845.jpg" alt="">
+          <dl>
+            <dt>2009-2011</dt>
+            <dd>Our Humble Beginning</dd>
+            <dd>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</dd>
+          </dl>
+        </li>
+        <li class="clearfix">
+          <span class="img">BE PART OF OUR STORY!</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+    <div class="team-intro-bg-color">
+    <div class="section layout">
+      <h2>Our Amazing Team</h2>
+      <p>Lorem ipsum dolor sit amet consectetur.</p>
+      <ul class="team-intro clearfix">
+        <li>
+          <img src="https://i.loli.net/2018/02/10/5a7ebe89ace8c.jpg" alt="">
+          <h3>Kay Garland</h3>
+          <p>Lead Designer</p>
+          <p class="account">
+            <a href="" class="iconfont icon-twitter"></a>
+            <a href="" class="iconfont icon-facebook"></a>
+            <a href="" class="iconfont icon-linkedin"></a>
+          </p>
+        </li>
+        <li>
+          <img src="https://i.loli.net/2018/02/12/5a81a43336d1f.jpg" alt="">
+          <h3>Larry Parker</h3>
+          <p>Lead Marketer</p>
+          <p class="account">
+            <a href="" class="iconfont icon-twitter"></a>
+            <a href="" class="iconfont icon-facebook"></a>
+            <a href="" class="iconfont icon-linkedin"></a>
+          </p>
+        </li>
+        <li>
+          <img src="https://i.loli.net/2018/02/12/5a81a45999867.jpg" alt="">
+          <h3>Diana Pertersen</h3>
+          <p>Lead Developer</p>
+          <p class="account">
+            <a href="" class="iconfont icon-twitter"></a>
+            <a href="" class="iconfont icon-facebook"></a>
+            <a href="" class="iconfont icon-linkedin"></a>
+          </p>
+            </li>
+        </ul>
+        <p class="team-detail">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque, laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde.</p>
+    </div>
+  </div>
+    <div class="sponsor-logo-bg">
+    <div class="section layout">
+        <ul class="sponsor-logo clearfix">
+            <li><a href=""><img src="https://i.loli.net/2018/02/10/5a7ed710c1202.jpg" alt=""></a></li>
+            <li><a href=""><img src="https://i.loli.net/2018/02/10/5a7ed710c1202.jpg" alt=""></a></li>
+            <li><a href=""><img src="https://i.loli.net/2018/02/10/5a7ed710c1202.jpg" alt=""></a></li>
+            <li><a href=""><img src="https://i.loli.net/2018/02/10/5a7ed710c1202.jpg" alt=""></a></li>
+        </ul>
+    </div>
+  </div>
+    <div class="contact-bg">
+      <div class="section layout">
+        <h2>CONTACT US</h2>
+        <p>Lorem ipsum dolor sit amet consectetur.</p>
+        <div class="contact clearfix">
+          <div class="information">
+            <input type="text" placeholder="YOUR NAME">
+            <input type="text" placeholder="YOUR EMAIL">
+            <input type="text" placeholder="YOUR PHONE">
+          </div>
+          <div class="message">
+            <textarea placeholder="YOUR MESSAGE" name="" id="" cols="30" rows="10"></textarea>
+          </div>
+        </div>
+        <a href="#" class="button">SEND MESSAGE</a>
+      </div>
+  </div>
+  </main>
+  <footer>
+      <ul>
+          <li><p>Copyright © Your Website 2014</p></li>
+          <li><a href="" class="iconfont icon-twitter"></a>
+              <a href="" class="iconfont icon-facebook"></a>
+              <a href="" class="iconfont icon-linkedin"></a></li>
+          <li><a href="">Privacy Policy</a>&nbsp&nbsp&nbsp&nbsp&nbsp<a href="">Terms of Use</a></li>
+      </ul>
+  </footer>
+</body>
+</html>
