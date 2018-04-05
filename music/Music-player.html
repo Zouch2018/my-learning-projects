@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>music-player</title>
+    <link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css
+">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            background-color: #72b78f;
+
+        }
+        .music-box{
+            position: absolute;
+            left:50%;
+            top:50%;
+            transform: translate(-50%,-50%);
+            box-shadow: 0 2px 3px 3px rgba(0,0,0,1);
+            width: 400px;
+            font-size: 16px;
+            border-top-left-radius: 7px;
+            border-top-right-radius: 7px;
+        }
+        .music-pic {
+            width: 400px;
+            height:300px;
+            border-top-left-radius: 7px;
+            border-top-right-radius: 7px;
+        }
+        .music-pic img{
+            width: 100%;
+            height:100%;
+            border-top-left-radius: 7px;
+            border-top-right-radius: 7px;
+        }
+        .music-panel {
+            border: 3px solid #f06b68;
+            padding: 20px 20px 5px 20px;
+            background-color: rgba(255, 255, 255, 1);
+
+        }
+
+        .music{
+            text-align: center;
+        }
+        .music .control{
+            margin-top:10px;
+            font-size: 36px;
+            color: #adadad;
+
+        }
+        ul li{
+            list-style: none;
+            background: #86958d;
+        }
+        .music .info{
+            color:#333;
+
+        }
+        .music .info .title{
+            font-size: 18px;
+        }
+        .music .info .author{
+            font-size: 14px;
+        }
+        .music .progress {
+            width: 260px;
+        }
+       .progress .bar{
+           margin-top: 5px;
+            height:3px;
+            background-color: rgba(0,0,0,0.3);
+            cursor:pointer;
+        }
+        .progress .progress-now{
+            background-color: #ee8a87;
+            height: 3px;
+            width:0;
+            position: relative;
+        }
+        .progress .time {
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+  <div class="cover"></div>
+  <div class="music-box">
+      <div class="music-pic"><img src="http://gradschool.zstu.edu.cn/images/17/09/08/15hm6u87sn/3.jpg" alt=""></div>
+      <div class="music-panel">
+          <div class="music">
+              <div class="info">
+                  <div class="title">my song</div>
+                  <div class="author">author</div>
+              </div>
+              <div class="control">
+                  <span class="back"><i class="fa fa-step-backward"></i></span>
+                  <span class="play"><i class="fa fa-pause"></i></span>
+                  <span class="forward"><i class="fa fa-step-forward"></i></span>
+              </div>
+
+          </div>
+          <div class="progress">
+            <div class="bar">
+              <div class="progress-total"></div>
+              <div class="progress-now"></div>
+            </div>
+            <div class="time">0:00</div>
+          </div>
+
+      </div>
+      <ul class="list">
+          <li>aaa</li>
+      </ul>
+  </div>
+  <script>
+      var musicList = [];
+      var currentIndex = 0;
+      var audio = new Audio();
+      audio.autoplay = true;
+      getMusicList(function(list){
+          musicList = list;
+          loadMusic(list[currentIndex])
+      });
+      audio.ontimeupdate = function() {
+          $(".music-box .progress-now").style.width = (this.currentTime.duration) * 100 + "%";
+      };
+          audio.onplay = function(){
+              clock = setInterval(function(){
+                  var min = Math.floor(this.currentTime/60);
+                  var sec = Math.floor(this.currentTime)%60 + "";
+                  sec = sec.length===2?sec:"0"+sec;
+                  $(".music-box .time").innerText = min +":" +sec
+              },1000)
+          };
+          audio.onpause = function(){
+              clearInterval(clock)
+          };
+      audio.onended = function(){
+          currentIndex = (++currentIndex)%musicList.length;
+          loadMusic(musicList[currentIndex])
+      }
+      $(".music-box .play").onclick = function(){
+          if(audio.paused){
+              audio.play();
+              this.querySelector(".fa").classList.remove("fa-play")
+              this.querySelector(".fa").classList.add("fa-pause")
+          }else{
+              audio.pause();
+              this.querySelector(".fa").classList.remove("fa-pause")
+              this.querySelector(".fa").classList.add("fa-play")
+          }
+          };
+      $(".music-box .forward").onclick = function(){
+          currentIndex = (++currentIndex)% music.length;
+          loadMusic(musicList[currentIndex])
+      };
+      $(".music-box .back").onclick = function(){
+          currentIndex = (musicList.length) + --currentIndex % music.length;
+      loadMusic(musicList[currentIndex]);
+      }
+      $(".music-box .bar").onclick = function(e){
+          var percent = e.offsetX/parseInt(getComputedStyle(this).width);
+          audio.currentTime = audio.duration*percent;
+      }
+      function $(selector){
+          return document.querySelector(selector)
+      }
+
+      function getMusicList(callback){
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET","/sample/music.json",true);
+          xhr.onload = function(){
+              if((xhr.status >=200 && xhr.status <300)|| xhr.status ===304){
+                  callback(JSON.parse(this.responseText))
+              }else{
+                  console.log("获取数据失败")
+              }
+          };
+          xhr.onerror = function(){
+              console.log("网络异常")
+          };
+          xhr.send();
+      }
+      function loadMusic(musicObj){
+          console.log("begin",musicObj)
+          $(".music-box .title").innerText = musicObj.title;
+          $(".music-box .author").innerText = musicObj.author;
+      }
+
+  </script>
+</body>
+</html>
