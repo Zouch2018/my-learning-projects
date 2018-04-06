@@ -12,22 +12,32 @@
             box-sizing: border-box;
         }
         body{
-            background-color: #72b78f;
-
+            height:100%;
         }
+        .cover {
+            height:100%;
+            width:100%;
+            position:absolute;
+            background-size:cover;
+            filter:blur(14px);
+            background-image: url("http://cloud.hunger-valley.com/17-9-22/28212907.jpg");
+        }
+
         .music-box{
             position: absolute;
             left:50%;
             top:50%;
             transform: translate(-50%,-50%);
-            box-shadow: 0 2px 3px 3px rgba(0,0,0,1);
+            box-shadow:3px 2px 16px 6px rgba(255,255,255,0.1) ;
             width: 400px;
             font-size: 16px;
             border-top-left-radius: 7px;
             border-top-right-radius: 7px;
+            border:2px white solid;
         }
         .music-pic {
-            width: 400px;
+            text-align:center;
+            width: 100%;
             height:300px;
             border-top-left-radius: 7px;
             border-top-right-radius: 7px;
@@ -39,7 +49,7 @@
             border-top-right-radius: 7px;
         }
         .music-panel {
-            border: 3px solid #f06b68;
+
             padding: 20px 20px 5px 20px;
             background-color: rgba(255, 255, 255, 1);
 
@@ -64,15 +74,19 @@
         }
         .music .info .title{
             font-size: 18px;
+            font-family:Verdana;
+            color:#333;
         }
         .music .info .author{
-            font-size: 14px;
+            font-size: 12px;
+            font-family:Helvetica;
+            color:#999;
         }
         .music .progress {
             width: 260px;
         }
-       .progress .bar{
-           margin-top: 5px;
+        .progress .bar{
+            margin-top: 5px;
             height:3px;
             background-color: rgba(0,0,0,0.3);
             cursor:pointer;
@@ -90,110 +104,117 @@
     </style>
 </head>
 <body>
-  <div class="cover"></div>
-  <div class="music-box">
-      <div class="music-pic"><img src="http://gradschool.zstu.edu.cn/images/17/09/08/15hm6u87sn/3.jpg" alt=""></div>
-      <div class="music-panel">
-          <div class="music">
-              <div class="info">
-                  <div class="title">my song</div>
-                  <div class="author">author</div>
-              </div>
-              <div class="control">
-                  <span class="back"><i class="fa fa-step-backward"></i></span>
-                  <span class="play"><i class="fa fa-pause"></i></span>
-                  <span class="forward"><i class="fa fa-step-forward"></i></span>
-              </div>
+<div class="cover"></div>
+<div class="music-box">
+    <div class="music-pic"><img src="http://cloud.hunger-valley.com/17-9-22/28212907.jpg" alt=""></div>
+    <div class="music-panel">
+        <div class="music">
+            <div class="info">
+                <div class="title">my song</div>
+                <div class="author">author</div>
+            </div>
+            <div class="control">
+                <span class="back"><i class="fa fa-step-backward"></i></span>
+                <span class="play"><i class="fa fa-pause"></i></span>
+                <span class="forward"><i class="fa fa-step-forward"></i></span>
+            </div>
 
-          </div>
-          <div class="progress">
+        </div>
+        <div class="progress">
             <div class="bar">
-              <div class="progress-total"></div>
-              <div class="progress-now"></div>
+                <div class="progress-total"></div>
+                <div class="progress-now"></div>
             </div>
             <div class="time">0:00</div>
-          </div>
+        </div>
 
-      </div>
-      <ul class="list">
-          <li>aaa</li>
-      </ul>
-  </div>
-  <script>
-      var musicList = [];
-      var currentIndex = 0;
-      var audio = new Audio();
-      audio.autoplay = true;
-      getMusicList(function(list){
-          musicList = list;
-          loadMusic(list[currentIndex])
-      });
-      audio.ontimeupdate = function() {
-          $(".music-box .progress-now").style.width = (this.currentTime.duration) * 100 + "%";
-      };
-          audio.onplay = function(){
-              clock = setInterval(function(){
-                  var min = Math.floor(this.currentTime/60);
-                  var sec = Math.floor(this.currentTime)%60 + "";
-                  sec = sec.length===2?sec:"0"+sec;
-                  $(".music-box .time").innerText = min +":" +sec
-              },1000)
-          };
-          audio.onpause = function(){
-              clearInterval(clock)
-          };
-      audio.onended = function(){
-          currentIndex = (++currentIndex)%musicList.length;
-          loadMusic(musicList[currentIndex])
-      }
-      $(".music-box .play").onclick = function(){
-          if(audio.paused){
-              audio.play();
-              this.querySelector(".fa").classList.remove("fa-play")
-              this.querySelector(".fa").classList.add("fa-pause")
-          }else{
-              audio.pause();
-              this.querySelector(".fa").classList.remove("fa-pause")
-              this.querySelector(".fa").classList.add("fa-play")
-          }
-          };
-      $(".music-box .forward").onclick = function(){
-          currentIndex = (++currentIndex)% music.length;
-          loadMusic(musicList[currentIndex])
-      };
-      $(".music-box .back").onclick = function(){
-          currentIndex = (musicList.length) + --currentIndex % music.length;
-      loadMusic(musicList[currentIndex]);
-      }
-      $(".music-box .bar").onclick = function(e){
-          var percent = e.offsetX/parseInt(getComputedStyle(this).width);
-          audio.currentTime = audio.duration*percent;
-      }
-      function $(selector){
-          return document.querySelector(selector)
-      }
+    </div>
+    <!-- <ul class="list">
+        <li>aaa</li>
+    </ul> -->
+</div>
+<script>
+    var musicList = [];
+    var clock;
+    var currentIndex = 0;
+    var audio = new Audio();
+    audio.autoplay = true;
+    getMusicList(function(list){
+        musicList = list;
+        <!-- console.log(musicList) -->
+        loadMusic(list[currentIndex])
+    });
+    audio.ontimeupdate = function() {
+        $(".music-box .progress-now").style.width = (this.currentTime)/(this.duration) * 100 + "%"
+    };
+    audio.onplay = function(){
+        clock = setInterval(function(){
+            var min = Math.floor(audio.currentTime/60);
+            var sec = Math.floor(audio.currentTime%60) + "";
+            sec = sec.length===2?sec:"0"+sec;
 
-      function getMusicList(callback){
-          var xhr = new XMLHttpRequest();
-          xhr.open("GET","/sample/music.json",true);
-          xhr.onload = function(){
-              if((xhr.status >=200 && xhr.status <300)|| xhr.status ===304){
-                  callback(JSON.parse(this.responseText))
-              }else{
-                  console.log("获取数据失败")
-              }
-          };
-          xhr.onerror = function(){
-              console.log("网络异常")
-          };
-          xhr.send();
-      }
-      function loadMusic(musicObj){
-          console.log("begin",musicObj)
-          $(".music-box .title").innerText = musicObj.title;
-          $(".music-box .author").innerText = musicObj.author;
-      }
+            $(".progress .time").innerText = min + ":"+sec;
+        },1000)
+    };
+    audio.onpause = function(){
+        clearInterval(clock)
+    };
+    audio.onended = function(){
+        currentIndex = (++currentIndex)%musicList.length;
+        loadMusic(musicList[currentIndex])
+    };
+    $(".music-box .play").onclick = function(){
+        if(audio.paused){
+            audio.play();
+            this.querySelector(".fa").classList.remove("fa-play");
+            this.querySelector(".fa").classList.add("fa-pause")
+        }else{
+            audio.pause();
+            this.querySelector(".fa").classList.remove("fa-pause");
+            this.querySelector(".fa").classList.add("fa-play")
+        }
+    };
+    $(".music-box .forward").onclick = function(){
+        currentIndex = (++currentIndex)% musicList.length;
+        loadMusic(musicList[currentIndex])
 
-  </script>
+    };
+    $(".music-box .back").onclick = function(){
+        currentIndex = (musicList.length + (--currentIndex)) % musicList.length;
+        loadMusic(musicList[currentIndex]);
+    };
+    $(".music-box .bar").onclick = function(e){
+        var percent = e.offsetX/parseInt(getComputedStyle(this).width);
+        audio.currentTime = audio.duration*percent;
+    };
+    function $(selector){
+        return document.querySelector(selector)
+    }
+
+    function getMusicList(callback){
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET","https://zouch2018.github.io/my-learning-projects/music/music.json",true);
+        xhr.onload = function(){
+            if((xhr.status >=200 && xhr.status <300)|| xhr.status ===304){
+                callback(JSON.parse(this.responseText))
+            }else{
+                console.log("获取数据失败")
+            }
+        };
+        xhr.onerror = function(){
+            console.log("网络异常")
+        };
+        xhr.send();
+    }
+    function loadMusic(musicObj){
+        console.log("begin",musicObj);
+        audio.src = musicObj.src;
+        $(".music-box .title").innerText = musicObj.title;
+        $(".music-box .author").innerText = musicObj.author;
+        $(".cover").style.backgroundImage = "url("+ musicObj.img+")";
+        $(".music-pic img").src = musicObj.img;
+    }
+
+</script>
 </body>
 </html>
