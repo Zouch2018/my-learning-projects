@@ -7,9 +7,6 @@
 html,body,main{
     height:100%;
 }
-body{
-    font:14px/1.5 Arial;
-}
 a{
     text-decoration:none;
     color:#333;
