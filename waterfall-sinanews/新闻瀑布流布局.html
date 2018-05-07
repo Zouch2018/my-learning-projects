@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>新闻瀑布流布局</title>
+    <title>index</title>
     <script  src="https://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
     <style>
         html,body,ul,li,p{
@@ -116,7 +116,7 @@
           }
       }).done(function(ret){
               if(ret && ret.status && ret.status.code === "0"){
-                  callback(ret.data);   //如果数据没问题，那么生成节点并摆放好位置
+                  callback(ret.data);   
                   curPage++
               }else {
                   console.log('get error data');
@@ -182,11 +182,7 @@
                   colSumHeight[idx] = $cur.outerHeight(true) + colSumHeight[idx];
                   $('#pic-ct').height(Math.max.apply(null, colSumHeight));
               });
-
           }
-
-
-
           function renderData(items) {
               var tpl = '',
                       $nodes;
@@ -201,10 +197,6 @@
               $('#pic-ct').append($nodes);
               return $nodes;
           }
-
-
-
-
   </script>
 </body>
 </html>
