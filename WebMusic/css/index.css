@@ -140,6 +140,7 @@ main .aside .iconfont {
      width: 10%;
      background-color:#fff;
      border-radius: .2vh;
+     transition: width 0.8s
  }
  main .author {
      font-size:3vh;
@@ -157,8 +158,17 @@ main .aside .iconfont {
      background: rgba(255,255,255,0.2);
      box-shadow: 0px -.25vh .25vh .25vh rgba(0,0,0,0.2);
  }
+ footer>.layout {
+     position:relative;
+ }
  footer .box {
      position:relative;
+     overflow:hidden;
+     height: 24vh;
+ }
+ footer ul {
+     position:absolute;
+     left:0;
  }
  footer ul:after {
      content:'';
@@ -174,13 +184,16 @@ main .aside .iconfont {
      cursor: pointer;
  }
  footer li:hover {
-     box-shadow: 0 0 .5vh .5vh rgba(255 255,255,0.6);
+     box-shadow: 0 0 .5vh .5vh rgba(255,255,255,0.6);
  }
  footer li .cover {
      height:16vh;
      background-size:cover;
      background-position:center center;
 
+ }
+ footer li.active {
+     box-shadow:0 0 .5vh .5vh rgba(255,255,255,0.6);
  }
  footer h3 {
      font-size:2vh;
@@ -208,4 +221,9 @@ main .aside .iconfont {
  }
  footer .icon-right {
      right: -8vh;
+ }
+ .boomText {
+     display: inline-block;
+     opacity:0;
+     color: #ef6b68;
  }
