@@ -159,10 +159,7 @@
           },
           render:function(){
               var _this= this
-              $.ajax({
-                  url:'https://api.jirengu.com/fm/getChannels.php',
-                  dataType:'jsonp'
-              }).done(function(ret){
+              $.getJSON('//api.jirengu.com/fm/getChannels.php').done(function(ret){
                   console.log(ret)
                   _this.renderFooter(ret.channels)
               }).fail(function(){
