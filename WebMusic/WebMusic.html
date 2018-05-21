@@ -50,31 +50,31 @@
           <div class="box">
               <ul>
                   <li>
-                      <div class="cover" style="background-image:url(http://cloud.hunger-valley.com/music/public_tuijian_spring.jpg-small);"></div>
+                      <div class="cover" style="background-image:url(https://cloud.hunger-valley.com/music/public_tuijian_spring.jpg-small);"></div>
                       <h3>漫步春天</h3>
                   </li>
                   <li>
-                      <div class="cover" style="background-image:url(http://cloud.hunger-valley.com/music/public_tuijian_spring.jpg-small);"></div>
+                      <div class="cover" style="background-image:url(https://cloud.hunger-valley.com/music/public_tuijian_spring.jpg-small);"></div>
                       <h3>漫步春天</h3>
                   </li>
                   <li>
-                      <div class="cover" style="background-image:url(http://cloud.hunger-valley.com/music/public_tuijian_spring.jpg-small);"></div>
+                      <div class="cover" style="background-image:url(https://cloud.hunger-valley.com/music/public_tuijian_spring.jpg-small);"></div>
                       <h3>漫步春天</h3>
                   </li>
                   <li>
-                      <div class="cover" style="background-image:url(http://cloud.hunger-valley.com/music/public_tuijian_spring.jpg-small);"></div>
+                      <div class="cover" style="background-image:url(https://cloud.hunger-valley.com/music/public_tuijian_spring.jpg-small);"></div>
                       <h3>漫步春天</h3>
                   </li>
                   <li>
-                      <div class="cover" style="background-image:url(http://cloud.hunger-valley.com/music/public_tuijian_spring.jpg-small);"></div>
+                      <div class="cover" style="background-image:url(https://cloud.hunger-valley.com/music/public_tuijian_spring.jpg-small);"></div>
                       <h3>漫步春天</h3>
                   </li>
                   <li>
-                      <div class="cover" style="background-image:url(http://cloud.hunger-valley.com/music/public_tuijian_spring.jpg-small);"></div>
+                      <div class="cover" style="background-image:url(https://cloud.hunger-valley.com/music/public_tuijian_spring.jpg-small);"></div>
                       <h3>漫步春天</h3>
                   </li>
                   <li>
-                      <div class="cover" style="background-image:url(http://cloud.hunger-valley.com/music/public_tuijian_spring.jpg-small);"></div>
+                      <div class="cover" style="background-image:url(https://cloud.hunger-valley.com/music/public_tuijian_spring.jpg-small);"></div>
                       <h3>漫步春天</h3>
                   </li>
               </ul>
@@ -223,7 +223,7 @@
           },
           loadMusic(callback){
               var _this = this
-              $.getJSON('//jirenguapi.applinzi.com/fm/getSong.php',{channel:this.channelId}).done(function(ret){
+              $.getJSON('https://jirenguapi.applinzi.com/fm/getSong.php',{channel:this.channelId}).done(function(ret){
                   _this.song = ret['song'][0]
                   _this.setMusic()
                   _this.loadLyric()
@@ -231,7 +231,7 @@
           },
           loadLyric(){
               var _this = this
-              $.getJSON('//jirenguapi.applinzi.com/fm/getLyric.php',{sid:this.song.sid}).done(function(ret){
+              $.getJSON('https://jirenguapi.applinzi.com/fm/getLyric.php',{sid:this.song.sid}).done(function(ret){
                   console.log(ret)
                   var lyric = ret.lyric
                   var lyricObj = {}
