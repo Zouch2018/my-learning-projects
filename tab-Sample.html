@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        *{
+            padding:0;
+            margin:0;
+        }
+
+        li {
+            list-style :none;
+        }
+
+        .clearfix:after {
+            content:'';
+            display:block;
+            clear:both;
+
+        }
+        .tab>li {
+            border: 1px solid #ccc;
+            float:left;
+            padding:6px;
+            cursor: pointer;
+        }
+
+        .tab>li.active {
+            background: #ccc;
+        }
+
+        .content>li {
+            width:300px;
+            height: 200px;
+            border:1px solid #ccc;
+            display: none;
+        }
+        .content>li.active {
+            display: block
+        }
+    </style>
+</head>
+<body>
+<div class="mod-tab">
+    <ul class="tab clearfix">
+        <li class="active">tab 1</li>
+        <li>tab 2</li>
+        <li>tab 3</li>
+        <li>tab 4</li>
+    </ul>
+    <ul class="content clearfix">
+        <li class="active">content 1</li>
+        <li>content 2</li>
+        <li>content 3</li>
+        <li>content 4</li>
+    </ul>
+</div>
+<script>
+    function Tab(ct) {
+        this.ct = ct
+        this.init()
+        this.bind()
+    }
+    Tab.prototype = {
+        init() {
+            this.tabs = this.ct.querySelectorAll('.tab>li')
+            this.contents = this.ct.querySelectorAll('.content>li')
+        },
+        bind() {
+            this.tabs.forEach((tab)=> {
+                var _this = this
+                tab.onclick = function (e) {
+                var target = e.target
+
+                var index = [].indexOf.call(_this.tabs, target)
+                _this.tabs.forEach(function(li){
+                    li.classList.remove('active')
+            })
+                target.classList.add('active')
+                _this.contents.forEach(function(li){
+                    li.classList.remove('active')
+            })
+                _this.contents[index].classList.add('active')
+            }
+        })
+        },
+    }
+    new Tab(document.querySelector('.mod-tab'))
+</script>
+</body>
+</html>
