@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+    <style>
+        .carousel {
+            position: relative;
+            width: 320px;
+            height: 180px;
+            margin: 50px auto;
+            overflow: hidden;
+        }
+        .carousel ul,
+        .carousel li {
+            margin:0;
+            padding:0;
+            list-style: none;
+        }
+        .carousel .img-ct {
+            position: absolute;
+
+        }
+        .carousel .img-ct:after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+        .carousel .img-ct>li {
+            float: left;
+        }
+        .carousel .img-ct img {
+            width:320px;
+            height:180px;
+        }
+        .carousel .arrow {
+            position: absolute;
+            top:50%;
+            margin-top: -15px;
+            display: inline-block;
+            width:30px;
+            height:30px;
+            border-radius:50%;
+            border:1px solid #fff;
+            line-height: 30px;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+        }
+        .carousel .arrow:hover {
+            opacity: 0.8;
+        }
+        .carousel .pre {
+            left: 10px;
+        }
+        .carousel .next {
+            right: 10px;
+        }
+        .carousel .bullet {
+            position:absolute;
+            bottom:10px;
+            width:100%;
+            font-size: 0;
+            text-align:center;
+        }
+        .carousel .bullet > li {
+            display: inline-block;
+            width:30px;
+            height:5px;
+            border:1px solid #ccc;
+            border-radius:4px;
+            margin:0 4px;
+            cursor: pointer;
+        }
+        .carousel .bullet >li.active{
+            background-color:#ccc;
+        }
+
+
+    </style>
+</head>
+<body>
+  <div class="carousel">
+      <ul class="img-ct">
+          <li><a href="#"><img src="https://i.loli.net/2018/07/23/5b55f4fb59b87.jpg" alt=""></a></li>
+          <li><a href="#"><img src="https://i.loli.net/2018/07/23/5b55f75521d01.jpg" alt=""></a></li>
+          <li><a href="#"><img src="https://i.loli.net/2018/07/23/5b55f32d7686f.jpg" alt=""></a></li>
+          <li><a href="#"><img src="https://i.loli.net/2018/07/23/5b55f42738365.jpg" alt=""></a></li>
+      </ul>
+      <a href="#" class="pre arrow">&lt</a>
+      <a href="#" class="next arrow">&gt</a>
+      <ul class="bullet">
+          <li class="active"></li>
+          <li></li>
+          <li></li>
+          <li></li>
+      </ul>
+  </div>
+  <script>
+      function Carousel($ct){
+          this.init($ct)
+          this.bind()
+         
+      }
+      Carousel.prototype = {
+          init: function($ct){
+              this.$ct = $ct
+              this.$imgCt   = this.$ct.find('.img-ct')
+              this.$imgs    = this.$ct.find('.img-ct > li')
+              this.$preBtn  = this.$ct.find('.pre')
+              this.$nextBtn  = this.$ct.find('.next')
+              this.$bullets = this.$ct.find('.bullet li')
+
+              this.imgWidth = this.$imgs.width()
+              this.imgCount = this.$imgs.length
+              this.index = 0
+
+
+              this.$imgCt.append(this.$imgs.first().clone())
+              this.$imgCt.prepend(this.$imgs.last().clone())
+              this.$imgCt.width((this.imgCount + 2)*this.imgWidth)
+              this.$imgCt.css('left',-this.imgWidth)
+          },
+          bind: function(){
+              var _this = this
+              this.$preBtn.on('click',function(){
+
+                  _this.playPre(1)
+              })
+              this.$nextBtn.on('click',function(){
+
+                  _this.playNext(1)
+              })
+              this.$bullets.on('click',function(){
+                  var index = $(this).index()
+                  if(_this.index > index){
+                      _this.playPre(_this.index - index)
+                  }else{
+                      _this.playNext(index - _this.index)
+                  }
+
+              })
+          },
+          playNext:function(len){
+
+              var _this = this
+              this.$imgCt.animate({
+                  left: '-='+this.imgWidth*len
+              },function(){
+                  _this.index+=len
+                  if(_this.index === _this.imgCount){
+                      _this.$imgCt.css('left',-_this.imgWidth)
+                      _this.index = 0
+                  }
+                  _this.setBullet()
+              })
+          },
+          playPre:function(len){
+              var _this= this
+              this.$imgCt.animate({
+                  left: '+='+this.imgWidth*len
+              },function(){
+                  _this.index-=len
+                  if(_this.index < 0){
+                      _this.$imgCt.css('left',-_this.imgWidth*_this.imgCount)
+                      _this.index = _this.imgCount - 1
+                  }
+                  _this.setBullet()
+              })
+          },
+          setBullet:function(){
+              this.$bullets.eq(this.index).addClass('active')
+                      .siblings().removeClass('active')
+          },
+          autoPlay:function(){
+              var _this = this
+              startClock = setInterval(function(){
+                  _this.playNext(1)
+              },1500)
+          },
+          stopPlay:function(){
+              clearInterval(startClock)
+          }
+      }
+      var firstCarousel =new Carousel($('.carousel').eq(0))
+  </script>
+</body>
+</html>
