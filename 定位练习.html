@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>定位练习</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+
+        }
+        body{
+            color:#333;
+            font-size: 14px;
+        }
+        a{
+            list-style: none;
+            text-decoration: none;
+            color: #333;
+        }
+        ul li {
+            list-style: none;
+        }
+        .nav {
+            width: 500px;
+            background-color: #ddd;
+            margin: 0 auto;
+            margin-top:30px;
+        }
+        .clearfix::after {
+            content: " ";
+            display: block;
+            clear:both;
+        }
+        .contain>li{
+            float: left;
+        }
+        .contain li  a{
+            padding:6px 8px;
+            width: 30px;
+            height:20px;
+            display: inline-block;
+
+        }
+        .contain li a:hover {
+            background-color: #aaa;
+        }
+        .more{
+            position: relative;
+        }
+        .more:hover .more-detail{
+            display: block;
+        }
+        .more-detail{
+            position: absolute;
+            top:32px;
+            background-color: #eee;
+            display: none;
+        }
+        .more-detail li a {
+            display: inline-block;
+            padding: 4px 6px;
+            min-width:40px;
+        }
+    </style>
+</head>
+<body>
+<div class="nav">
+    <ul class="contain clearfix">
+        <li ><a href="">首页</a></li>
+        <li><a href="">作品</a></li>
+        <li class="more"><a href="">更多</a>
+            <ul class="more-detail">
+                <li><a href="">GitHub</a></li>
+                <li><a href="">知乎</a></li>
+                <li><a href="">微博</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
