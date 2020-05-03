@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>3d-login</title>
+    <link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css
+">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html,body,.main{
+            height: 100%;
+        }
+        a {
+            text-decoration: none;
+        }
+        body {
+            font: 14px/1.5 Arial;
+            background: #ddd;
+            background: url(https://i.imgur.com/aF7kNfr.jpg) center center no-repeat;
+            background-size: cover;
+
+        }
+        .header {
+            position: relative;
+        }
+        .header .fa-user-circle-o {
+            position: absolute;
+            top:10px;
+            right:20px;
+            font-size: 25px;
+            color: #ddd;
+        }
+
+        .main .flip-modal {
+            display: none;
+
+        }
+        .flip-modal .modal-register,
+        .flip-modal .modal-login {
+            width: 400px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            box-shadow: 0 2px 3px 3px rgba(0,0,0,0.3);
+            background: #fff;
+        }
+        .flip-modal.login .modal-login,
+        .flip-modal.register .modal-register {
+            transform: translate(-50%,-50%) rotateY(0deg);
+            backface-visibility: hidden;
+            transition:all 1s;
+        }
+        .flip-modal.login .modal-register,
+        .flip-modal.register .modal-login {
+            transform: translate(-50%,-50%) rotateY(180deg);
+            backface-visibility: hidden;
+            transition:all 1s;
+        }
+        .modal-login .tab,
+        .modal-register .tab {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+        .tab .login-tab,
+        .tab .register-tab {
+            color: #666;
+            padding-bottom: 4px;
+            margin: 0 8px;
+            font-size: 16px;
+        }
+        .login .login-tab,
+        .register .register-tab {
+            border-bottom: 3px solid #888;
+        }
+
+        .tab .fa-close {
+            position: absolute;
+            top:-16px;
+            right:6px;
+            color: #888;
+            font-size: 16px;
+        }
+        .modal .content {
+            margin: 20px 40px
+        }
+        .content .errormsg {
+            color: darkorange;
+            font-size: 12px;
+            padding: 3px 0;
+        }
+        .content .input-field {
+            position: relative;
+        }
+        .input-field input[type=text],
+        .input-field input[type=password] {
+            padding: 10px 10px 10px 32px;
+            margin-bottom:10px;
+            width: 100%;
+            outline: none;
+        }
+        .input-field .fa {
+            position: absolute;
+            top: 12px;
+            left: 14px;
+            font-size: 16px;
+            color: #aaa;
+        }
+        .input-field input[type=submit] {
+            padding: 6px 8px;
+            font-size: 12px;
+            color: #666;
+            border: none;
+            background: #fff;
+            box-shadow: 0 0 2px rgba(0,0,0,0.4);
+            outline: none;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="header">
+        <i class="fa fa-user-circle-o"></i>
+    </div>
+    <div class="main">
+        <div class="flip-modal login">
+            <div class="modal modal-login">
+                <div class="tab">
+                    <a href="#" class="login-tab">登入</a>
+                    <a href="#" class="register-tab">注册</a>
+                    <a href="#" class="fa fa-close close"></a>
+                </div>
+                <div class="content">
+                    <div class="errormsg"></div>
+                    <form action="/login" method="post">
+                        <div class="username input-field">
+                            <i class="fa fa-user-o"></i>
+                            <input type="text" placeholder="请输入用户名">
+                        </div>
+                        <div class="password input-field">
+                            <i class="fa fa-lock"></i>
+                            <input type="password" placeholder="请输入密码">
+                        </div>
+                        <div class="input-field">
+                            <input type="submit" value="登入">
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="modal modal-register">
+                <div class="tab">
+                    <a href="#" class="login-tab">登入</a>
+                    <a href="#" class="register-tab">注册</a>
+                    <a href="#" class="fa fa-close close"></a>
+                </div>
+                <div class="content">
+                    <div class="errormsg"></div>
+                    <form action="/register" method="post">
+                        <div class="username input-field">
+                            <i class="fa fa-user-o"></i>
+                            <input type="text" placeholder="请输入用户名">
+                        </div>
+                        <div class="password input-field">
+                            <i class="fa fa-lock"></i>
+                            <input type="password" placeholder="请输入密码">
+                        </div>
+                        <div class="password password2 input-field">
+                            <i class="fa fa-lock"></i>
+                            <input type="password" placeholder="请再次输入密码">
+                        </div>
+                        <div class="input-field">
+                            <input type="submit" value="注册">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+       function $(selector){
+          return document.querySelector(selector)
+        }
+
+        //点击弹出flip-modal
+        $('.fa-user-circle-o').onclick = function(e){
+         e.stopPropagation()
+         $('.flip-modal').style.display = 'block'
+        }
+         //事件的监听
+        $('.flip-modal').addEventListener("click", function(e){
+          e.stopPropagation()
+          if(e.target.classList.contains('close')){
+            $('.flip-modal').style.display = 'none'
+          }
+          if(e.target.classList.contains('login-tab')){
+            $('.flip-modal').classList.remove('register')
+            $('.flip-modal').classList.add('login')
+          }
+          if(e.target.classList.contains('register-tab')){
+            $('.flip-modal').classList.remove('login')
+            $('.flip-modal').classList.add('register')
+          }
+        })
+       document.addEventListener('click',function(){
+         $('.flip-modal').style.display = 'none'
+       })
+
+        //用户登入或者注册前进行简单验证
+       $('.modal-login form').addEventListener('submit',function (e) {
+         e.preventDefault()
+         if(!/\w{6,10}/.test($('form .username input[type=text]').value)) {
+           $('.modal-login .errormsg').innerText = '用户名长度为6-10个字符，包括字母，数字，下划线'
+           return false
+         }
+         if(!/\w{6,10}/.test($('form .password input[type=password]').value)) {
+           $('.modal-login .errormsg').innerText = '密码长度为6-10个字符，包括字母，数字，下划线'
+           return false
+         }
+         this.submit()
+       })
+       $('.modal-register form').addEventListener('submit',function (e) {
+         e.preventDefault()
+         if(!/\w{6,10}/.test($('form .username input[type=text]').value)) {
+           $('.modal-register .errormsg').innerText = '用户名长度为6-10个字符，包括字母，数字，下划线'
+           return false
+         }
+         if(!/\w{6,10}/.test($('form .password input[type=password]').value)) {
+           $('.modal-register .errormsg').innerText = '密码长度为6-10个字符，包括字母，数字，下划线'
+           return false
+         }
+         if($('form .password input[type=password]').value !== $('form .password2 input[type=password]').value){
+           $('.modal-register .errormsg').innerText = '密码两次输入不一致'
+           return false
+         }
+         this.submit()
+       })
+        $()
+
+
+    </script>
+</body>
+</html>
