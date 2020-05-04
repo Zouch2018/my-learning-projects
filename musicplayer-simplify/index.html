@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>musicplayer</title>
+    <link rel="stylesheet" href="./common.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <style>
+        .cover {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background: #333;
+        }
+        .music-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 300px;
+            border: 2px solid #fff;
+            background: #fff;
+        }
+        .music-bg {
+            width: 100%;
+            text-align: center;
+        }
+        .music-bg img {
+            width: 100%;
+        }
+        .music-panel {
+            margin: 20px 5px;
+        }
+        .clearfix::after {
+            content: ' ';
+            clear: both;
+            display: block;
+        }
+        .music-tab {
+            float: left;
+        }
+        .music-tab i {
+            font-size: 25px;
+            color: #666;
+            display: inline-block;
+            padding:5px 8px;
+        }
+        .music-detail {
+            margin-left: 150px;
+        }
+        .music-detail .music-name,
+        .music-detail .music-author {
+            color: #666;
+            padding: 2px 0;
+        }
+        .music-panel .progress {
+            margin: 5px 8px;
+            width: 270px;
+        }
+        .progress-bar {
+            width: 270px;
+            height: 3px;
+            background-color: #aaa;
+
+        }
+        .progress-now {
+            width: 100px;
+            height: 3px;
+            background-color: #e88d1c;
+            position: relative;
+            cursor: pointer;
+        }
+        .progress .total-time,
+        .progress .play-time {
+            margin-top: 4px;
+            color: #666;
+        }
+        .progress .total-time {
+            float: right;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="cover">
+    <div class="music-box">
+        <div class="music-bg">
+            <img src="" alt="">
+        </div>
+        <div class="music-panel clearfix">
+            <div class="music-tab">
+                <span class="pre"><i class="fas fa-step-backward"></i></span>
+                <span class="play"><i class="fas fa-play"></i></span>
+                <span class="next"><i class="fas fa-step-forward"></i></span>
+            </div>
+            <div class="music-detail">
+                <div class="music-name">晴天</div>
+                <div class="music-author">周杰伦</div>
+            </div>
+            <div class="progress clearfix">
+                <div class="progress-bar">
+                    <div class="progress-total"></div>
+                    <div class="progress-now"></div>
+                </div>
+                <div class="time">
+                    <span class="play-time">1:04</span>
+                    <span class="total-time">5:30</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function $(selector){
+      return document.querySelector(selector)
+    };
+
+    var musicList = [];
+    var audio = new Audio();
+    audio.autoplay = true;
+    var currentIndex = 0;
+
+    var getMusic = {
+      init: function () {
+        this.getData();
+        this.start();
+      },
+      getData: function(callback){
+        var xhr = new XMLHttpRequest()
+        xhr.open('GET','https://zouch2018.github.io/my-learning-projects/music/music.json',true)
+        xhr.onload = function(){
+          if((xhr.status >= 200 && xhr.status< 300) || xhr.status === 304){
+            callback&&callback(JSON.parse(xhr.responseText));
+          }else{
+            console.log('数据获取失败')
+          }
+        }
+        xhr.onerror = function(){
+          console.log('网络异常')
+        }
+        xhr.send()
+      },
+
+      start: function() {
+        var _this = this;
+        this.getData(function(list){
+          musicList = list;
+          loadMusic(list[currentIndex]);
+        })
+      }
+    }
+    function loadMusic(musicObj) {
+      console.log('ddd', musicObj)
+      audio.src = musicObj.src
+      $(".music-box .music-name").innerText = musicObj.title;
+      $(".music-box .music-author").innerText = musicObj.author;
+      $(".cover").style.backgroundImage = "url("+ musicObj.img+")";
+      $(".music-bg img").src = musicObj.img;
+    }
+
+    var app = {
+      init: function(){
+        this.bind();
+        getMusic.init();
+      },
+      bind: function(){
+        $(".music-tab .play").onclick = function(){
+          console.log('play')
+          if(audio.paused){
+            audio.play();
+            this.querySelector(".fas").classList.remove("fa-play");
+            this.querySelector(".fas").classList.add("fa-pause")
+          }else{
+            audio.pause();
+            this.querySelector(".fas").classList.remove("fa-pause");
+            this.querySelector(".fas").classList.add("fa-play")
+          }
+        };
+        console.log('bind');
+        audio.ontimeupdate = function() {
+          $(".music-box .progress-now").style.width = (this.currentTime)/(this.duration) * 100 + "%"
+        };
+        audio.onplay = function(){
+          clock = setInterval(function(){
+            var min = Math.floor(audio.currentTime/60);
+            var sec = Math.floor(audio.currentTime%60) + "";
+            var totalmin = Math.floor(audio.duration/60);
+            var totalsec = Math.floor(audio.duration%60) + "";
+            sec = sec.length===2?sec:"0"+sec;
+            totalsec = totalsec.length===2?totalsec:"0"+totalsec;
+            $(".progress .play-time").innerText = min + ":"+sec;
+            $(".progress .total-time").innerText = totalmin + ":"+totalsec;
+          },1000)
+        };
+        audio.onpause= function () {
+          clearInterval(clock)
+        };
+        audio.onended = function(){
+          currentIndex = (++currentIndex)%musicList.length;
+          loadMusic(musicList[currentIndex])
+        };
+        $(".music-tab .pre").onclick = function(){
+          currentIndex = (++currentIndex)% musicList.length;
+          loadMusic(musicList[currentIndex])
+          if($('.music-tab .play').querySelector(".fas").classList.contains('fa-play')){
+            console.log('pre')
+            $('.music-tab .play').querySelector(".fas").classList.remove("fa-play")
+            $('.music-tab .play').querySelector(".fas").classList.add("fa-pause")
+          }
+        };
+        $(".music-tab .next").onclick = function(){
+          currentIndex = (musicList.length + (--currentIndex)) % musicList.length;
+          loadMusic(musicList[currentIndex]);
+          if($('.music-tab .play').querySelector(".fas").classList.contains('fa-play')){
+            console.log('pre')
+            $('.music-tab .play').querySelector(".fas").classList.remove("fa-play")
+            $('.music-tab .play').querySelector(".fas").classList.add("fa-pause")
+        };
+        $(".music-panel .progress-bar").onclick = function(e){
+          var percent = e.offsetX/parseInt(getComputedStyle(this).width);
+          audio.currentTime = audio.duration*percent;
+        };
+        }
+      }
+    }
+    ;
+    app.init();
+
+</script>
+</body>
+</html>
