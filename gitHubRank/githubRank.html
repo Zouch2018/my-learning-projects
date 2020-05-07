@@ -15,6 +15,7 @@
     }
     body {
         position: relative;
+        font-size: 14px;
     }
 
     section {
@@ -22,7 +23,6 @@
         overflow: scroll;
         background: #fff;
         display: none;
-        border:1px solid red;
     }
     footer {
         position: absolute;
@@ -53,12 +53,14 @@
         background: #fff;
         
     }
-    .container .item a {
+    .container .item a,
+    .search-result .item a{
         display: block;
         position: relative;
         border-bottom: 1px solid #888;
     }
-    .container .item .order{
+    .container .item .order,
+    .search-result .item .order{
         background: #4e954c;
         padding: 2px 8px;
         position:absolute;
@@ -68,19 +70,23 @@
         color: #fff;
     }
 
-    #repo-board .container .item .detail {
+    #repo-board .container .item .detail,
+    .search-result .item .detail{
         margin-left: 80px;
     }
-    .container .item .detail h2 {
+    .container .item .detail h2,
+    .search-result .item .detail h2{
         color: #666;
         padding: 2px;
     }
 
-    .container .item .detail .intro {
+    .container .item .detail .intro,
+    .search-result .item .detail .intro {
         color: #aaa;
         padding: 2px;
     }
-    .container .item .detail .star {
+    .container .item .detail .star,
+    .search-result .item .detail .star {
         color: #aaa;
         padding: 2px;
     }
@@ -89,7 +95,7 @@
         height: 80px;
         margin-left: 80px;
     }
-    .container .item img {
+    #user-board .container .item img {
         height: 80px;
     }
     #user-board .item  .detail .user-detail {
@@ -111,6 +117,36 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg);  }
     }
+    #search .search-area {
+        display: flex;
+        margin:6px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #aaa;
+        position: relative;
+    }
+    #search .search-area input {
+        width: calc(100% - 60px);
+        height: 40px;
+        background: #eee;
+        border-radius: 4px;
+        border: 1px solid #fff;
+        outline: none;
+    }
+    #search .search-area button{
+        width: 60px;
+        height: 40px;
+        background: #ef6a03;
+        position: absolute;
+        right: 2px;
+        top:0;
+        color: #fff;
+        border-radius: 4px;
+        font-size: 16px;
+        border: 1px solid #fff;
+
+
+    }
+    
 
 
 </style>
@@ -146,9 +182,12 @@
         </div>
     </section>
     <section id="search">
-        <div class="container">
-            <input type="text">
-            <button>search</button>
+        <div class="search-area">
+            <input type="text" placeholder="  search repos">
+            <button>search</button>   
+        </div>
+        <div class="search-result">
+            <div class="loading"><i class="fas fa-redo"></i></div>
         </div>
     </section>
 </main>
@@ -337,12 +376,94 @@
       }
     }
 
+    var search = {
+      init:function(){
+        this.$element = $('main> #search');
+        this.$button = $('#search button')
+        this.page = 1;
+        this.count = 30;
+        this.isFinish = false;
+        this.isLoading = false;
+        this.bind();
+
+      },
+      bind:function(){
+        var _this = this;
+        this.$button.click(function(){
+          _this.getData();
+          if(_this.isToBottom){
+
+          }
+
+        })
+      },
+      getData: function(callback){
+        if(this.isLoading)return;
+        this.isLoading = true;
+        this.$element.find('.fa-redo').show();
+        var keyword = this.$element.find('input').val();
+        var _this = this;
+        $.ajax({
+          url: `https://api.github.com/search/repositories?q=${keyword}+language:javascript&sort=stars&order=desc&page=${_this.page}`,
+          dataType: 'jsonp'
+        }).done(function(ret){
+          _this.$element.find('.fa-redo').hide()
+          if(_this.page*_this.count <= ret.data.total_count){
+            _this.isFinish = true;
+          }
+          _this.setData(ret)
+        }).fail(function(){
+          console.log('error')
+        }).always(function(){
+          _this.isLoading = false;
+          _this.$element.find('.fa-redo').hide();
+        })
+      },
+      setData: function(ret) {
+        var data = ret.data;
+        this.render(data);
+
+      },
+      render:function (data) {
+        this.page++;
+        var _this= this;
+        console.log(data);
+        data.items.forEach(function (items,index) {
+          var tpl = `<div class="item">
+                <a href="https://github.com/TryGhost/Ghost">
+                    <div class="order">1</div>
+                    <div class="detail">
+                        <h2 class="title">react</h2>
+                        <div class="intro">Knockout makes it easier to create rich, responsive UIs with JavaScript</div>
+                        <div class="star"><span class="star-number">122121</span><span> star</span></div>
+                    </div>
+                </a>
+            </div>`;
+          var $node = $(tpl);
+          $node.find('a').attr('href',items.html_url );
+          $node.find('.order').text(index + 1 + (_this.page - 2)*_this.count);
+          $node.find('.title').text(items.name);
+          $node.find('.intro').text(items.description);
+          $node.find('.star-number').text(items.stargazers_count);
+          if($('#search').find('.search-result .item') >=1){
+            $('#search').find('.search-result .item').remove();
+            $('#search').find('.search-result').append($node);
+          }
+          $('#search').find('.search-result').append($node);
+
+        })
+      },
+      isToBottom:function () {
+        return this.$element.find('.search-result').height() < this.$element.height() + this.$element.scrollTop() +20
+      }
+    }
+
     var app = {
       init:function(){
         paging.init();
         repoBoard.init();
         userBoard.init();
-
+        search.init();
       }
 
     }
