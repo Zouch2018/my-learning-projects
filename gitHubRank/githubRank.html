@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>githubRank</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <link rel="stylesheet" href="./common.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+
+</head>
+<style>
+    html,body,main {
+        height:100%;
+    }
+    body {
+        position: relative;
+    }
+
+    section {
+        height: calc(100vh - 60px);
+        overflow: scroll;
+        background: #fff;
+        display: none;
+        border:1px solid red;
+    }
+    footer {
+        position: absolute;
+        bottom: 0;
+        height: 60px;
+        width: 100%;
+        border-top: 1px solid #ddd;
+        display: flex;
+        text-align: center;
+    }
+    footer .active {
+        color: #e27624;
+    }
+    section:nth-child(1){
+        display: block;
+    }
+    footer div i,
+    footer div span {
+        display: block;
+        padding: 2px;
+    }
+    footer div {
+        flex: 1;
+        padding-top: 10px;
+
+    }
+    #repo-board .container {
+        background: #fff;
+        
+    }
+    .container .item a {
+        display: block;
+        position: relative;
+        border-bottom: 1px solid #888;
+    }
+    .container .item .order{
+        background: #4e954c;
+        padding: 2px 8px;
+        position:absolute;
+        top:50%;
+        left: 40px;
+        transform: translate(-50%,-50%);
+        color: #fff;
+    }
+
+    #repo-board .container .item .detail {
+        margin-left: 80px;
+    }
+    .container .item .detail h2 {
+        color: #666;
+        padding: 2px;
+    }
+
+    .container .item .detail .intro {
+        color: #aaa;
+        padding: 2px;
+    }
+    .container .item .detail .star {
+        color: #aaa;
+        padding: 2px;
+    }
+    #user-board .item  .detail {
+        display: flex;
+        height: 80px;
+        margin-left: 80px;
+    }
+    .container .item img {
+        height: 80px;
+    }
+    #user-board .item  .detail .user-detail {
+        flex: 1;
+        margin-left: 4px;
+    }
+    #user-board .item  .detail .user-detail .username{
+        font-size: 18px;
+        padding: 2px;
+    }
+    .loading {
+        text-align: center;
+    }
+    .loading .fa-redo {
+        display: inline-block;
+        animation: 1s rotate linear infinite;
+    }
+    @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg);  }
+    }
+
+
+</style>
+<body>
+<main>
+    <section id="repo-board">
+        <div class="container">
+<!--            <div class="item">-->
+<!--                <a href="https://github.com/TryGhost/Ghost">-->
+<!--                    <div class="order">1</div>-->
+<!--                    <div class="detail">-->
+<!--                        <h2 class="title">react</h2>-->
+<!--                        <div class="intro">Knockout makes it easier to create rich, responsive UIs with JavaScript</div>-->
+<!--                        <div class="star-number">12221 star</div>-->
+<!--                    </div>-->
+<!--                </a>-->
+<!--            </div>-->
+        </div>
+        <div class="loading"><i class="fas fa-redo"></i></div>
+    </section>
+    <section id="user-board">
+        <div class="container">
+<!--            <div class="item">-->
+<!--                <a href="">-->
+<!--                    <div class="order">1</div>-->
+<!--                    <div class="detail ">-->
+<!--                        <div class="avatar"></div>-->
+<!--                        <div class="username">ruanyf</div>-->
+<!--                        <div class="followers">121313</div>-->
+<!--                    </div>-->
+<!--                </a>-->
+<!--            </div>-->
+        </div>
+    </section>
+    <section id="search">
+        <div class="container">
+            <input type="text">
+            <button>search</button>
+        </div>
+    </section>
+</main>
+<footer>
+    <div class="active"><i class="fas fa-trophy"></i><span>Top repos</span></div>
+    <div><i class="fas fa-crown"></i><span>Top users</span></div>
+    <div><i class="fas fa-search"></i><span>Searches</span></div>
+</footer>
+<script>
+
+    var paging = {
+      init: function () {
+        this.$tabs = $('footer>div');
+        this.$panels = $('main>section')
+        this.bind();
+      },
+      bind: function(){
+        var _this = this;
+        this.$tabs.on('click',function(){
+          console.log('click..')
+          var index = $(this).index();
+          _this.$panels.hide().eq(index).fadeIn();
+          _this.$tabs.removeClass().eq(index).addClass('active');
+        })
+      }
+    }
+
+
+
+
+    var repoBoard = {
+      init:function(){
+        this.$element = $('main> #repo-board');
+        this.page = 1;
+        this.count = 30;
+        this.isFinish = false;
+        this.isLoading = false;
+        this.bind();
+        this.getData();
+
+      },
+      bind:function(){
+        var _this = this;
+        this.$element.scroll(function(){
+          console.log('scro;;')
+            if(_this.isToBottom){
+              _this.getData();
+            }
+
+        })
+      },
+      getData: function(callback){
+        if(this.isLoading)return;
+        this.isLoading = true;
+        this.$element.find('.fa-redo').show();
+        var _this = this;
+        $.ajax({
+          url: 'https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc',
+          data: {
+            page: this.page
+          },
+          dataType: 'jsonp'
+        }).done(function(ret){
+          _this.$element.find('.fa-redo').hide()
+          if(_this.page*_this.count <= ret.data.total_count){
+            _this.isFinish = true;
+          }
+          _this.setData(ret)
+        }).fail(function(){
+          console.log('error')
+        }).always(function(){
+          _this.isLoading = false;
+          _this.$element.find('.fa-redo').hide();
+        })
+      },
+      setData: function(ret) {
+        var data = ret.data;
+        this.render(data);
+
+      },
+      render:function (data) {
+        this.page++;
+        var _this= this;
+        console.log(data);
+        data.items.forEach(function (items,index) {
+          var tpl = `<div class="item">
+                <a href="https://github.com/TryGhost/Ghost">
+                    <div class="order">1</div>
+                    <div class="detail">
+                        <h2 class="title">react</h2>
+                        <div class="intro">Knockout makes it easier to create rich, responsive UIs with JavaScript</div>
+                        <div class="star"><span class="star-number">122121</span><span>star</span></div>
+                    </div>
+                </a>
+            </div>`;
+          var $node = $(tpl);
+          $node.find('a').attr('href',items.html_url );
+          $node.find('.order').text(index + 1 + (_this.page - 2)*_this.count);
+          $node.find('.title').text(items.name);
+          $node.find('.intro').text(items.description);
+          $node.find('.star-number').text(items.stargazers_count);
+          $('#repo-board').find('.container').append($node);
+        })
+      },
+      isToBottom:function () {
+        return this.$element.find('.container').height() < this.$element.height() + this.$element.scrollTop() +20
+      }
+    }
+
+    var userBoard = {
+      init:function(){
+        this.$element = $('main> #user-board');
+        this.page = 1;
+        this.count = 30;
+        this.isLoading = false;
+        this.isFinish = false;
+        this.getData();
+        this.bind();
+      },
+      bind:function(){
+        var _this = this;
+        this.$element.scroll(function(){
+          console.log('scro;;')
+          if(_this.isToBottom){
+            _this.getData();
+          }
+
+        })
+      },
+      getData: function(callback){
+        var _this = this;
+        if(this.isLoading)return;
+        this.isLoading = true;
+        this.$element.find('.fa-redo').show();
+        $.ajax({
+          url: 'https://api.github.com/search/users?q=followers:>1000+location:china+language:javascript',
+          data: {
+            page: this.page
+          },
+          dataType: 'jsonp'
+        }).done(function(ret){
+          _this.setData(ret)
+        }).fail(function(){
+          console.log('error')
+        }).always(function(){
+          _this.isLoading = false;
+          _this.$element.find('.fa-redo').hide();
+        })
+      },
+      setData: function(ret) {
+        var data = ret.data;
+        console.log('setdata',ret)
+        this.render(data);
+
+      },
+      render:function (data) {
+        this.page++;
+        var _this= this;
+        console.log('render',data);
+        data.items.forEach(function (items,index) {
+          var tpl = `<div class="item">
+                        <a href="">
+                            <div class="order">1</div>
+                            <div class="detail">
+                                <div class="avatar">
+                                    <img src="" alt="">
+                                </div>
+                                <div class="user-detail">
+                                    <div class="username">ruanyf</div>
+                                    <div class="followers">121313</div>
+                                </div>
+                            </div>
+                        </a>
+                      </div>`;
+          var $node = $(tpl);
+          $node.find('a').attr('href',items.html_url );
+          $node.find('.order').text((index+1)+(_this.page - 2)*_this.count);
+          $node.find('.avatar img').attr('src',items.avatar_url);
+          $node.find('.username').text(items.login);
+          $('#user-board').find('.container').append($node);
+        })
+
+      },
+      isToBottom:function () {
+        return this.$element.find('.container').height() < this.$element.height() + this.$element.scrollTop() +20
+      }
+    }
+
+    var app = {
+      init:function(){
+        paging.init();
+        repoBoard.init();
+        userBoard.init();
+
+      }
+
+    }
+
+    app.init()
+
+</script>
+</body>
+</html>
