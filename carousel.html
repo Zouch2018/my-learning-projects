@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>carousel</title>
+    <script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        a {
+            text-decoration: none;
+        }
+        li {
+            list-style: none;
+        }
+        .viewport {
+            width:320px;
+            height: 200px;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .container {
+            position: absolute;
+        }
+        .container>li {
+            float:left;
+            width: 320px;
+            height: 200px;
+        }
+        .clearfix::after {
+            content:'';
+            display: block;
+            clear: both;
+        }
+        .container img {
+            width: 100%;
+            height: 100%;
+        }
+        .arrow {
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            color: #ddd;
+            text-align: center;
+        }
+        .arrow.pre {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            margin-top: -30px;
+        }
+        .arrow.next {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            margin-top: -30px;
+        }
+        .bullet {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+        }
+        .bullet>li {
+            display: inline-block;
+            width:30px;
+            height: 5px;
+            border: 1px solid #aaa;
+            border-radius: 3px;
+        }
+        .bullet>li.active {
+            background: #aaa;
+        }
+    </style>
+</head>
+<body>
+<div class="carousel">
+    <div class="viewport">
+        <ul class="container clearfix">
+            <li><a href="#"><img src="https://i.loli.net/2018/07/23/5b55f4fb59b87.jpg" alt=""></a></li>
+            <li><a href="#"><img src="https://i.loli.net/2018/07/23/5b55f75521d01.jpg" alt=""></a></li>
+            <li><a href="#"><img src="https://i.loli.net/2018/07/23/5b55f32d7686f.jpg" alt=""></a></li>
+            <li><a href="#"><img src="https://i.loli.net/2018/07/23/5b55f42738365.jpg" alt=""></a></li>
+        </ul>
+        <a href="#" class="pre arrow">&lt</a>
+        <a href="#" class="next arrow">&gt</a>
+        <ul class="bullet">
+            <li class="active"></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+</div>
+<script>
+    function Carousel($ct){
+      this.init($ct);
+      this.bind();
+
+
+    }
+    Carousel.prototype = {
+      init:function($ct){
+        this.$ct = $ct;
+        this.$container = this.$ct.find('.container');
+        this.$imgs = this.$ct.find('.container>li');
+        this.$nextBtn = this.$ct.find('.next');
+        this.$preBtn = this.$ct.find('.pre');
+        this.$bullets = this.$ct.find('.bullet>li');
+        this.imgWidth = this.$ct.find('.container>li').width();
+        this.count = this.$ct.find('.container>li').length;
+        this.index = 0;
+        this.$container.width(this.imgWidth*this.count);
+        this.clock = null;
+        this.autoPlay();
+
+      },
+      bind:function(){
+        var _this = this;
+        this.$nextBtn.on('click',function(){
+          _this.playNext(1);
+        });
+        this.$preBtn.on('click',function(){
+          _this.playPre(1);
+        });
+        this.$bullets.on('click',function(){
+           var index = $(this).index();
+           if(index > _this.index){
+             _this.playNext(index - _this.index);
+           }
+           if(index < _this.index){
+             _this.playPre(_this.index - index)
+           }
+          if(index===_this.index)return;
+        })
+      },
+      playPre: function(len){
+
+        if(this.index === 0){
+          this.$container.css({
+            'left': -this.imgWidth*(this.count-1)
+          })
+
+          this.index = this.count - 1;
+          this.setBullet();
+        }else{
+          this.$container.animate({
+            left: '+=' + this.imgWidth*len
+          })
+
+          this.index -=len ;
+          this.setBullet();
+        }
+        console.log(this.index)
+
+      },
+      playNext: function(len){
+        if(this.index=== (this.count -1)){
+          this.$container.css({
+            'left':0
+          })
+
+          this.index = 0;
+          this.setBullet();
+        }else{
+          this.$container.animate({
+            left: '-=' + this.imgWidth*len,
+          })
+
+          this.index+=len;
+          this.setBullet();
+
+        }
+        console.log(this.index)
+      },
+      setBullet:function () {
+        this.$bullets.eq(this.index).addClass('active').siblings().removeClass('active');
+      },
+      autoPlay:function () {
+        var _this=this;
+        this.clock = setInterval(function () {
+          _this.playNext(1)
+        },2000)
+      },
+      stopPlay:function () {
+        clearInterval(this.clock)
+      }
+    }
+
+
+    var firstCarousel = new Carousel($('.carousel'));
+
+</script>
+</body>
+</html>
