@@ -150,6 +150,7 @@
 <main>
     <section id="repo-board">
         <div class="container">
+            <!--            以下为模板-->
 <!--            <div class="item">-->
 <!--                <a href="https://github.com/TryGhost/Ghost">-->
 <!--                    <div class="order">1</div>-->
@@ -165,6 +166,7 @@
     </section>
     <section id="user-board">
         <div class="container">
+<!--            以下为模板-->
 <!--            <div class="item">-->
 <!--                <a href="">-->
 <!--                    <div class="order">1</div>-->
@@ -193,7 +195,7 @@
     <div><i class="fas fa-search"></i><span>Searches</span></div>
 </footer>
 <script>
-
+// 页面底部的三个按钮初始化和切换
     var paging = {
       init: function () {
         this.$tabs = $('footer>div');
@@ -213,7 +215,7 @@
 
 
 
-
+// 前端项目排行
     var repoBoard = {
       init:function(){
         this.$element = $('main> #repo-board');
@@ -292,7 +294,7 @@
         return this.$element.find('.container').height() < this.$element.height() + this.$element.scrollTop() +20
       }
     }
-
+// 前端用户人气排行
     var userBoard = {
       init:function(){
         this.$element = $('main> #user-board');
@@ -371,7 +373,7 @@
         return this.$element.find('.container').height() < this.$element.height() + this.$element.scrollTop() +20
       }
     }
-
+// 前端项目搜索
     var search = {
       init:function(){
         this.$element = $('main> #search');
@@ -454,6 +456,7 @@
       }
     }
 
+// 项目主入口
     var app = {
       init:function(){
         paging.init();
